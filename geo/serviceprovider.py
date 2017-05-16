@@ -5,7 +5,7 @@
 # Time: 2016-05-08 20:05
 """
 互联网地图服务提供商 web service 接口调用模块
-
+使用GCJ02，WGS84及BD09坐标系
 
 """
 from geo import BaseServiceProvider
@@ -28,6 +28,7 @@ class Baidu(BaseServiceProvider):
     def __init__(self, key,timeout=200):
         super(Baidu, self).__init__(timeout)
         self.key = key
+        self.t = 'BD09'
 
     def geoconv(self, lat, lng, f='WGS84'):
         """
@@ -137,15 +138,6 @@ class Baidu(BaseServiceProvider):
             return response['content']['point']['y'], response['content']['point']['x']
         return None, None
 
-    @classmethod
-    def toGCJ02(lat, lng):
-        """转换为国测局坐标系"""
-        return coordinatetransform.transformBDtoGCJ(lat,lng)
-        
-    @classmethod
-    def toWGS84(lat, lng):
-        """转换为84坐标系"""
-        return coordinatetransform.transformBDtoWGS(lat, lng)
 
 
 class Amap(BaseServiceProvider):
@@ -161,6 +153,7 @@ class Amap(BaseServiceProvider):
     def __init__(self, key, timeout=200):
         super(Amap, self).__init__(timeout)
         self.key = key
+        self.t = 'GCJ02'
 
     def geoconv(self, lat, lng, f='WGS84'):
         """
@@ -255,15 +248,7 @@ class Amap(BaseServiceProvider):
             return (y1+y2)/2, (x1+x2)/2
         return None, None
 
-    @classmethod
-    def toGCJ02(lat, lng):
-        """转换为国测局坐标系"""
-        return lat,lng
-        
-    @classmethod
-    def toWGS84(lat, lng):
-        """转换为84坐标系"""
-        return coordinatetransform.transformGCJtoWGS(lat, lng)
+
 
 class Tencent(BaseServiceProvider):
     """腾讯地图"""
@@ -278,6 +263,7 @@ class Tencent(BaseServiceProvider):
     def __init__(self, key, timeout=200):
         super(Tencent, self).__init__(timeout)
         self.key = key
+        self.t = 'GCJ02'
 
     def geoconv(self, lat, lng, f='WGS84'):
         if f=='WGS84':
@@ -356,18 +342,30 @@ class Tencent(BaseServiceProvider):
             return response['result']['location']['lat'],response['result']['location']['lng']
         return None, None
 
-    @classmethod
-    def toGCJ02(lat, lng):
-        """转换为国测局坐标系"""
-        return lat,lng
-        
-    @classmethod
-    def toWGS84(lat, lng):
-        """转换为84坐标系"""
-        return coordinatetransform.transformGCJtoWGS(lat, lng)
 
 
 
 class Google(BaseServiceProvider):
     """谷歌地图"""
-    pass
+
+
+    def geoweather(self, city):
+        pass
+
+    def geopoi(self):
+        pass
+
+    def location(self, host):
+        pass
+
+    def geocoding_poi(self, address, city, city_limit=True):
+        pass
+
+    def geocoding(self, address, city):
+        pass
+
+    def geoconv(self, lat, lng):
+        pass
+
+    def reversecoding(self, lat, lng, f):
+        pass
